@@ -344,6 +344,7 @@ GameObject:
   m_Component:
   - component: {fileID: 990467370}
   - component: {fileID: 990467369}
+  - component: {fileID: 990467371}
   m_Layer: 0
   m_Name: Board
   m_TagString: Untagged
@@ -379,6 +380,33 @@ Transform:
   - {fileID: 1103013040}
   m_Father: {fileID: 2093757539}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &990467371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 990467368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 001a6fd0cdf1c8a499e20f9ee9227b25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tetrominoes:
+  - tetromino: 0
+    tile: {fileID: 11400000, guid: 67389d2e8a2b2e649938c979639fe5e8, type: 2}
+  - tetromino: 1
+    tile: {fileID: 11400000, guid: bff44f85df83e3349a91dd1760c2be1f, type: 2}
+  - tetromino: 2
+    tile: {fileID: 11400000, guid: 60f3be6b3f26afc44b088b99375e1ac7, type: 2}
+  - tetromino: 3
+    tile: {fileID: 11400000, guid: 7cd3be851e695a743b7fef13ba62fb18, type: 2}
+  - tetromino: 4
+    tile: {fileID: 11400000, guid: 060cc75485231fa44bdad5b59b4ab2e4, type: 2}
+  - tetromino: 5
+    tile: {fileID: 11400000, guid: 19fe2b5745bcb624fa9229c5aa71ea9a, type: 2}
+  - tetromino: 6
+    tile: {fileID: 11400000, guid: d4740329587fbdb4fbfea14a311cbbee, type: 2}
 --- !u!1 &1004284008
 GameObject:
   m_ObjectHideFlags: 0
