@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
 
 public class Piece : MonoBehaviour
@@ -23,5 +25,53 @@ public class Piece : MonoBehaviour
         {
             this.cells[i] = (Vector3Int)_tetromino.cells[i];
         }
+    }
+
+    private void Update() 
+    {
+        this.board.ClearTetromino(this);
+
+        if(Input.GetKeyDown(KeyCode.A))
+        {
+            Move(Vector2Int.left);
+        }
+        else if(Input.GetKeyDown(KeyCode.D))
+        {
+            Move(Vector2Int.right);
+        }
+        else if(Input.GetKeyDown(KeyCode.S))
+        {
+            Move(Vector2Int.down);
+        }
+        else if (Input.GetKeyDown(KeyCode.Space))
+        {
+            HardDrop();
+        }
+
+        this.board.DisplayTetromino(this);
+    }
+
+    private void HardDrop()
+    {
+        while (Move(Vector2Int.down))
+        {
+            continue;
+        }
+    }
+
+    private bool Move(Vector2Int _translation)
+    {
+        Vector3Int newPosition = this.position;
+        newPosition.x += _translation.x;
+        newPosition.y += _translation.y;
+
+        bool valid = this.board.IsValidPosition(this, newPosition);
+        
+        if(valid)
+        {
+            this.position = newPosition;
+        }
+
+        return valid;
     }
 }
