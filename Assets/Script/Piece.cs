@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class Piece : MonoBehaviour
@@ -10,11 +11,13 @@ public class Piece : MonoBehaviour
     public TetrominoData tetromino {get; private set;}
     public Vector3Int[] cells {get; private set;}
     public Vector3Int position {get; private set;}
+    public int rotationIndex {get; private set;}
     public void Initialize(Board _board, Vector3Int _position, TetrominoData _tetromino)
     {
         this.board = _board;
         this.position = _position;
         this.tetromino = _tetromino;
+        this.rotationIndex = 0;
 
         if(this.cells == null)
         {
@@ -30,6 +33,15 @@ public class Piece : MonoBehaviour
     private void Update() 
     {
         this.board.ClearTetromino(this);
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            Rotate(-1);
+        }
+        else if (Input.GetKeyDown(KeyCode.E))
+        {
+            Rotate(1);
+        }
 
         if(Input.GetKeyDown(KeyCode.A))
         {
@@ -73,5 +85,19 @@ public class Piece : MonoBehaviour
         }
 
         return valid;
+    }
+
+    private void Rotate(int _direction)
+    {
+        this.rotationIndex = Wrap(this.rotationIndex + _direction, 0, 4); // there is 4 possible rotation for a piece
+    }
+
+    private int Wrap(int input, int min, int max)
+    {
+        if (input < min) {
+            return max - (min - input) % (max - min);
+        } else {
+            return min + (input - min) % (max - min);
+        }
     }
 }
