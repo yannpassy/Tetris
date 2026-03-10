@@ -90,6 +90,32 @@ public class Piece : MonoBehaviour
     private void Rotate(int _direction)
     {
         this.rotationIndex = Wrap(this.rotationIndex + _direction, 0, 4); // there is 4 possible rotation for a piece
+
+        for (int i = 0; i < this.cells.Length; i++)
+        {
+            Vector3 cell = this.cells[i];
+
+            int x, y;
+
+            switch (this.tetromino.tetromino)
+             {
+                case Tetromino.I:
+                case Tetromino.O:
+                    // "I" and "O" are rotated from an offset center point
+                    cell.x -= 0.5f;
+                    cell.y -= 0.5f;
+                    x = Mathf.CeilToInt((cell.x * Data.RotationMatrix[0] * _direction) + (cell.y * Data.RotationMatrix[1] * _direction));
+                    y = Mathf.CeilToInt((cell.x * Data.RotationMatrix[2] * _direction) + (cell.y * Data.RotationMatrix[3] * _direction));
+                    break;
+
+                default:
+                    x = Mathf.RoundToInt((cell.x * Data.RotationMatrix[0] * _direction) + (cell.y * Data.RotationMatrix[1] * _direction));
+                    y = Mathf.RoundToInt((cell.x * Data.RotationMatrix[2] * _direction) + (cell.y * Data.RotationMatrix[3] * _direction));
+                    break;
+            }
+
+            cells[i] = new Vector3Int(x, y, 0);
+        }
     }
 
     private int Wrap(int input, int min, int max)
