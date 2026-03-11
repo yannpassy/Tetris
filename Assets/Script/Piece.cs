@@ -89,8 +89,20 @@ public class Piece : MonoBehaviour
 
     private void Rotate(int _direction)
     {
+        int originalRotation= this.rotationIndex;
         this.rotationIndex = Wrap(this.rotationIndex + _direction, 0, 4); // there is 4 possible rotation for a piece
 
+        ApplyRotationMatrix(_direction);
+
+        if (!TestWallKicks(this.rotationIndex, _direction))
+        {
+            this.rotationIndex = originalRotation;
+            ApplyRotationMatrix(-_direction); // revert the rotation made
+        }
+    }
+
+    private void ApplyRotationMatrix(int _direction)
+    {
         for (int i = 0; i < this.cells.Length; i++)
         {
             Vector3 cell = this.cells[i];
@@ -116,6 +128,33 @@ public class Piece : MonoBehaviour
 
             cells[i] = new Vector3Int(x, y, 0);
         }
+    }
+
+    private bool TestWallKicks(int _rotationIndex, int _rotationDirection)
+    {
+        int wallKicksIndex = getWallKicksIndex(_rotationIndex, _rotationDirection);
+
+        for (int i = 0; i < this.tetromino.wallKicks.GetLength(1); i++)
+        {
+            Vector2Int translation = this.tetromino.wallKicks[wallKicksIndex, i];
+
+            if (Move(translation)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private int getWallKicksIndex(int _rotationIndex, int _rotationDirection)
+    {
+        int wallKickIndex = _rotationIndex * 2;
+
+        if (_rotationDirection < 0) {
+            wallKickIndex--;
+        }
+
+        return Wrap(wallKickIndex, 0, this.tetromino.wallKicks.GetLength(0));
     }
 
     private int Wrap(int input, int min, int max)
