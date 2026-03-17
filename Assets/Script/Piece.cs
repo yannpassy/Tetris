@@ -71,7 +71,30 @@ public class Piece : MonoBehaviour
             HardDrop();
         }
 
+        if (Time.time > this.stepTime)
+        {
+            MoveDownForced();
+        }
+
         this.board.DisplayTetromino(this);
+    }
+
+    private void MoveDownForced()
+    {
+        this.stepTime = Time.time + this.stepDelay;
+        Move(Vector2Int.down);
+
+        if(this.lockTime >= this.lockDelay)
+        {
+            Lock();
+        }
+    }
+
+    private void Lock()
+    {
+        this.board.DisplayTetromino(this);
+        this.board.ClearLines();
+        this.board.SpawnPiece();
     }
 
     private void HardDrop()
@@ -80,6 +103,8 @@ public class Piece : MonoBehaviour
         {
             continue;
         }
+
+        Lock();
     }
 
     private bool Move(Vector2Int _translation)

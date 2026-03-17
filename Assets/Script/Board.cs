@@ -41,7 +41,21 @@ public class Board : MonoBehaviour
         TetrominoData tetromino = this.tetrominoes[random];
 
         this.activePiece.Initialize(this, this.spawnPosition , tetromino);
-        DisplayTetromino(this.activePiece);
+
+        if (IsValidPosition(this.activePiece, this.spawnPosition))  // check for the game over
+        {
+            DisplayTetromino(this.activePiece);
+        }
+        else
+        {
+            GameOver();
+        } 
+    }
+
+    private void GameOver()
+    {
+        this.tilemap.ClearAllTiles();
+        //  ....   fait ce que tu veux (un menu game over par ex)
     }
 
     public void DisplayTetromino(Piece _piece)
@@ -82,5 +96,62 @@ public class Board : MonoBehaviour
         }
         
         return true;
+    }
+
+    public void ClearLines()
+    {
+        RectInt bounds = this.boardBounds;
+        int row = bounds.yMin;
+
+        while( row < bounds.yMax)
+        {
+            if(isLineFull(row))
+            {
+                LineClear(row);
+            }
+            else
+            {
+                row ++;
+            }
+        }
+    }
+
+    private bool isLineFull(int _row)
+    {
+        RectInt bounds = this.boardBounds;
+        for (int col = bounds.xMin; col < bounds.xMax; col++)
+        {
+            Vector3Int position = new Vector3Int(col, _row, 0);  // we use Vector3Int because of the tilemap
+            if(!this.tilemap.HasTile(position))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void LineClear(int _row)
+    {
+        RectInt bounds = this.boardBounds;
+        for (int col = bounds.xMin; col < bounds.xMax; col++)
+        {
+            Vector3Int position = new Vector3Int(col, _row, 0);  // we use Vector3Int because of the tilemap
+            this.tilemap.SetTile(position, null);
+        }
+
+        // go down all the rows above
+        while( _row < bounds.yMax)
+        {
+            for (int col = bounds.xMin; col < bounds.xMax; col++)
+            {
+                Vector3Int position = new Vector3Int(col, _row + 1, 0);  
+                TileBase tileAbove = this.tilemap.GetTile(position);
+
+                position = new Vector3Int(col, _row, 0);
+                this.tilemap.SetTile(position, tileAbove);
+            }
+
+            _row++; 
+        }
     }
 }
